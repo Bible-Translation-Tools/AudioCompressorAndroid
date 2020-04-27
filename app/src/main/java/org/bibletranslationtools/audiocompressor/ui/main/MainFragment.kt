@@ -17,6 +17,9 @@ import io.reactivex.disposables.Disposable
 import org.bibletranslationtools.audiocompressor.databinding.MainFragmentBinding
 import java.io.File
 
+const val INPUT_RESULT = Activity.RESULT_FIRST_USER
+const val OUTPUT_RESULT = Activity.RESULT_FIRST_USER + 1
+
 class MainFragment : Fragment() {
 
     companion object {
@@ -36,11 +39,11 @@ class MainFragment : Fragment() {
         binding.fileSelectBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             intent.type = "application/zip"
-            startActivityForResult(intent, 42)
+            startActivityForResult(intent, INPUT_RESULT)
         }
         binding.outputBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-            startActivityForResult(intent, 43)
+            startActivityForResult(intent, OUTPUT_RESULT)
         }
         binding.outputBtn.visibility = View.INVISIBLE
 
@@ -78,7 +81,7 @@ class MainFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            42 -> {
+            INPUT_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val uri = data?.data
                     uri?.let { uri ->
@@ -88,8 +91,6 @@ class MainFragment : Fragment() {
                                 if (hasEnoughSpace(doc.length())) {
                                     val root = act.cacheDir
                                     val del = root.deleteRecursively()
-                                    println("del is $del")
-                                    println("free space is ${root.freeSpace}")
                                     val workspace = File(root, "workspace")
                                     if (workspace.exists()) workspace.deleteRecursively()
                                     workspace.mkdirs()
@@ -116,7 +117,7 @@ class MainFragment : Fragment() {
                     }
                 }
             }
-            43 -> {
+            OUTPUT_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val uri = data?.data
                     uri?.let { path ->
