@@ -1,5 +1,11 @@
 package org.bibletranslationtools.audiocompressor.ui.main
 
+import android.app.Application
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Completable
@@ -11,11 +17,17 @@ import net.lingala.zip4j.model.ZipParameters
 import org.bibletranslationtools.audiocompressor.audio.ConvertAudio
 import java.io.File
 
-class MainViewModel : ViewModel() {
+class MainViewModel(val app: Application) : AndroidViewModel(app) {
+
+    val inZipProperty: MutableLiveData<File?> by lazy  {
+        MutableLiveData<File?>()
+    }
 
     val outZipProperty: MutableLiveData<File?> by lazy {
         MutableLiveData<File?>()
     }
+
+    val outPathUriProperty: MutableLiveData<DocumentFile?> = MutableLiveData<DocumentFile?>(null)
 
     val inProgressProperty = MutableLiveData(false)
 
@@ -44,12 +56,23 @@ class MainViewModel : ViewModel() {
             }
     }
 
-    fun convertAudio(dir: File) {
+    private fun convertAudio(dir: File) {
         ConvertAudio.convertDir(dir)
     }
 
-    fun rezip(dir: File, output: File){
+    private fun rezip(dir: File, output: File){
         val zp = ZipFile(output.absolutePath)
         zp.createZipFileFromFolder(dir, ZipParameters(), false, 0)
+    }
+
+    private fun writeOutput() {
+        outPathUriProperty.value?.let {
+            val out = it.createFile("application/zip", outZipProperty.value!!.name)
+            app.contentResolver.openOutputStream(out!!.uri).use { ofs ->
+                outZipProperty.value!!.inputStream().use { ifs ->
+                    ifs.copyTo(ofs)
+                }
+            }
+        }
     }
 }

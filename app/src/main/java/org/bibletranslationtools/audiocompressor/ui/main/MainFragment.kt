@@ -1,7 +1,9 @@
 package org.bibletranslationtools.audiocompressor.ui.main
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Environment
@@ -45,8 +47,6 @@ class MainFragment : Fragment() {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             startActivityForResult(intent, OUTPUT_RESULT)
         }
-        binding.outputBtn.visibility = View.INVISIBLE
-
         return binding.root
     }
 
@@ -68,6 +68,21 @@ class MainFragment : Fragment() {
             }
         }
 
+        val inputFileObserver = Observer<File?> {
+            it?.let {
+                binding.selectedFileView.text = it.name
+            } ?: run {
+                binding.selectedFileView.text = ""
+            }
+        }
+        val outputFileObserver = Observer<DocumentFile?> {
+            it?.let {
+                binding.outputPathView.text = it.name
+            } ?: run {
+                binding.outputPathView.text = ""
+            }
+        }
+
         val inProgressObserver = Observer<Boolean> {
             disableUIIfInProgress(it)
         }
@@ -76,6 +91,8 @@ class MainFragment : Fragment() {
 
         viewModel.outZipProperty.observe(this, outZipObserver)
         viewModel.inProgressProperty.observe(this, inProgressObserver)
+        viewModel.inZipProperty.observe(this, inputFileObserver)
+        viewModel.outPathUriProperty.observe(this, outputFileObserver)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -84,35 +101,9 @@ class MainFragment : Fragment() {
             INPUT_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val uri = data?.data
-                    uri?.let { uri ->
-                        println(uri.path)
-                        activity?.let { act ->
-                            DocumentFile.fromSingleUri(act, uri)?.let { doc ->
-                                if (hasEnoughSpace(doc.length())) {
-                                    val root = act.cacheDir
-                                    val del = root.deleteRecursively()
-                                    val workspace = File(root, "workspace")
-                                    if (workspace.exists()) workspace.deleteRecursively()
-                                    workspace.mkdirs()
-
-                                    val out = File(workspace, doc.name)
-                                    try {
-                                        val instream = act.contentResolver.openInputStream(uri)
-                                        val outstream = out.outputStream()
-                                        instream.copyTo(outstream)
-                                        instream.close()
-                                        outstream.close()
-                                        viewModel.convertZip(workspace, out)
-                                    } finally {
-                                        // out.delete()
-                                        println("delet")
-                                    }
-                                } else {
-                                    Toast
-                                        .makeText(act, "Not Enough Space", Toast.LENGTH_LONG)
-                                        .show()
-                                }
-                            }
+                    if (uri != null) {
+                        activity?.let {
+                            copyInput(it, uri)
                         }
                     }
                 }
@@ -120,15 +111,9 @@ class MainFragment : Fragment() {
             OUTPUT_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val uri = data?.data
-                    uri?.let { path ->
-                        activity?.let { act ->
-                            val tree = DocumentFile.fromTreeUri(act, path)
-                            val outFile = tree?.createFile("application/zip", viewModel.outZipProperty.value!!.name)
-                            val outstream = act.contentResolver.openOutputStream(outFile!!.uri)
-                            val instream = viewModel.outZipProperty.value!!.inputStream()
-                            instream.copyTo(outstream)
-                            outstream.close()
-                            instream.close()
+                    if (uri != null) {
+                        activity?.let {
+                            configureOutput(it, uri)
                         }
                     }
                 }
@@ -150,6 +135,38 @@ class MainFragment : Fragment() {
             binding.fileSelectBtn.isEnabled = true
             binding.outputBtn.isEnabled = true
             binding.progressBar.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun copyInput(act: Context, uri: Uri) {
+        DocumentFile.fromSingleUri(act, uri)?.let { doc ->
+            if (hasEnoughSpace(doc.length())) {
+                val root = act.cacheDir
+                val workspace = File(root, "workspace")
+                workspace.mkdirs()
+                val out = File(workspace, doc.name)
+                act.contentResolver.openInputStream(uri).use { instream ->
+                    instream?.let {
+                        out.outputStream().use { outstream ->
+                            instream.copyTo(outstream)
+                        }
+                    }
+                }
+                if (out.exists() && out.length() > 0) {
+                    viewModel.inZipProperty.value = out
+                } else {
+                    Toast.makeText(act, "Could not load file to convert", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(act, "Not Enough Space", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun configureOutput(act: Context, path: Uri) {
+        val tree = DocumentFile.fromTreeUri(act, path)
+        tree?.let {
+            viewModel.outPathUriProperty.value = it
         }
     }
 }

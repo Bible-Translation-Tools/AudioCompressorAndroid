@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#BED7EA"
+        android:background="#B5C0D1"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -47,7 +47,7 @@
                     android:gravity="center"
                     android:text="Pick a File to Convert"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="30sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -55,7 +55,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="#000000" />
+                    android:text="empty"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
 
                 <Button
                     android:id="@+id/fileSelectBtn"
@@ -65,8 +67,9 @@
                     android:background="#FFFFFF"
                     android:drawableLeft="@drawable/ic_note_add_black_24dp"
                     android:shadowColor="#FFFFFF"
-                    android:text="&lt;u&gt;Browse Files&lt;/u&gt;"
-                    android:textColor="#0000FF" />
+                    android:text="Browse Files"
+                    android:textColor="#0000FF"
+                    android:textSize="24sp" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -100,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:text="Choose Output Path"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="30sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -108,7 +111,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
 
                 <Button
                     android:id="@+id/outputBtn"
@@ -120,6 +124,7 @@
                     android:shadowColor="#FFFFFF"
                     android:text="Browse Files"
                     android:textColor="#0000FF"
+                    android:textSize="24sp"
                     android:visibility="visible" />
             </LinearLayout>
 
@@ -130,7 +135,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0000DC"
+        android:background="#015AD9"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -148,7 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="#5881E5"
+            android:background="#33FFFFFF"
             android:drawableLeft="@drawable/ic_arrow_forward_white_24dp"
             android:gravity="center"
             android:padding="16dp"
@@ -158,6 +163,6 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="24sp" />
     </LinearLayout>
 </LinearLayout>
