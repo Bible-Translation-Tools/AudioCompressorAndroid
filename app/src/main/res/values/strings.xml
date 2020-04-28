@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Audio Compressor</string>
+    <string name="app_name">BTT: Audio Compressor</string>
+    <string name="browse">Browse Files</string>
+    <string name="convert">Convert</string>
+    <string name="hdd_full">Not Enough Space</string>
+    <string name="load_file_failed">Could not load file to convert</string>
+    <string name="pick_input_prompt">Pick a File to Convert</string>
+    <string name="pick_output_prompt">Choose Output Path</string>
 </resources>

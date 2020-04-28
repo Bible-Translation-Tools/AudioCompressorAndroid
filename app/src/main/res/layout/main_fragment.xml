@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:keepScreenOn="true"
     tools:context=".ui.main.MainFragment">
 
     <LinearLayout
@@ -45,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Pick a File to Convert"
+                    android:text="@string/pick_input_prompt"
                     android:textColor="#000000"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -55,7 +56,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="empty"
                     android:textColor="#000000"
                     android:textSize="24sp" />
 
@@ -64,10 +64,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:background="#FFFFFF"
+                    android:background="#00FFFFFF"
                     android:drawableLeft="@drawable/ic_note_add_black_24dp"
                     android:shadowColor="#FFFFFF"
-                    android:text="Browse Files"
+                    android:text="@string/browse"
                     android:textColor="#0000FF"
                     android:textSize="24sp" />
             </LinearLayout>
@@ -101,7 +101,7 @@
                     android:id="@+id/selectOutputPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Choose Output Path"
+                    android:text="@string/pick_output_prompt"
                     android:textColor="#000000"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -119,10 +119,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:background="#FFFFFF"
+                    android:background="#00FFFFFF"
                     android:drawableLeft="@drawable/ic_note_add_black_24dp"
                     android:shadowColor="#FFFFFF"
-                    android:text="Browse Files"
+                    android:text="@string/browse"
                     android:textColor="#0000FF"
                     android:textSize="24sp"
                     android:visibility="visible" />
@@ -159,7 +159,7 @@
             android:padding="16dp"
             android:paddingStart="64dp"
             android:paddingEnd="64dp"
-            android:text="Convert File"
+            android:text="@string/convert"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"

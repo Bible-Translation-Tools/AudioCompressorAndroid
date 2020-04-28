@@ -10,15 +10,15 @@ class ConvertAudio {
                 return
             }
             val walk = dir.walkTopDown()
-            walk.forEach {
-                when (it.extension) {
+            walk.forEach { file ->
+                when (file.extension) {
                     "mp3" -> mp3ToWav(
-                        it,
-                        File(it.parentFile, it.name.substringBefore(".mp3") + ".wav")
+                        file,
+                        File(file.parentFile, file.name.substringBefore(".mp3") + ".wav")
                     )
                     "wav" -> wavToMp3(
-                        it,
-                        File(it.parentFile, it.name.substringBefore(".wav") + ".mp3")
+                        file,
+                        File(file.parentFile, file.name.substringBefore(".wav") + ".mp3")
                     )
                 }
             }
@@ -32,9 +32,8 @@ class ConvertAudio {
 
         fun wavToMp3(wav: File, mp3: File) {
             val mp3Args = arrayOf(
-                "--preset", "standard",
-                "-q", "0",
-                "-m", "s",
+                "-q", "5",
+                "-m", "m",
                 wav.absolutePath,
                 mp3.absolutePath
             )

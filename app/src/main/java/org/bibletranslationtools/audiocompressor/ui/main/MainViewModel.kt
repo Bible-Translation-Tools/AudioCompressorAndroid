@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Completable
@@ -19,7 +20,9 @@ import java.io.File
 
 class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
-    val inZipProperty: MutableLiveData<File?> by lazy  {
+    val workDir = File(app.cacheDir, "workspace")
+
+    val inZipProperty: MutableLiveData<File?> by lazy {
         MutableLiveData<File?>()
     }
 
@@ -31,7 +34,8 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
     val inProgressProperty = MutableLiveData(false)
 
-    fun convertZip(workDir: File, zip: File) {
+    fun convertZip() {
+        val zip = inZipProperty.value!!
         val zipper = ZipFile(zip)
         inProgressProperty.value = true
         val dest = File(workDir, "/unzip/" + zip.nameWithoutExtension)
@@ -53,6 +57,8 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
             .subscribe {
                 inProgressProperty.value = false
                 outZipProperty.value = final
+                writeOutput()
+                outZipProperty.value?.delete()
             }
     }
 
@@ -60,7 +66,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
         ConvertAudio.convertDir(dir)
     }
 
-    private fun rezip(dir: File, output: File){
+    private fun rezip(dir: File, output: File) {
         val zp = ZipFile(output.absolutePath)
         zp.createZipFileFromFolder(dir, ZipParameters(), false, 0)
     }

@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Observer
 import io.reactivex.disposables.Disposable
+import org.bibletranslationtools.audiocompressor.R
 import org.bibletranslationtools.audiocompressor.databinding.MainFragmentBinding
 import java.io.File
 
@@ -47,6 +48,11 @@ class MainFragment : Fragment() {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             startActivityForResult(intent, OUTPUT_RESULT)
         }
+        binding.convertBtn.setOnClickListener {
+            if (viewModel.inZipProperty.value != null && viewModel.outPathUriProperty.value != null) {
+                viewModel.convertZip()
+            }
+        }
         return binding.root
     }
 
@@ -67,7 +73,6 @@ class MainFragment : Fragment() {
                 binding.outputBtn.visibility = View.INVISIBLE
             }
         }
-
         val inputFileObserver = Observer<File?> {
             it?.let {
                 binding.selectedFileView.text = it.name
@@ -82,7 +87,6 @@ class MainFragment : Fragment() {
                 binding.outputPathView.text = ""
             }
         }
-
         val inProgressObserver = Observer<Boolean> {
             disableUIIfInProgress(it)
         }
@@ -130,10 +134,12 @@ class MainFragment : Fragment() {
         if (isRunning) {
             binding.fileSelectBtn.isEnabled = false
             binding.outputBtn.isEnabled = false
+            binding.convertBtn.isEnabled = false
             binding.progressBar.visibility = View.VISIBLE
         } else {
             binding.fileSelectBtn.isEnabled = true
             binding.outputBtn.isEnabled = true
+            binding.convertBtn.isEnabled = true
             binding.progressBar.visibility = View.INVISIBLE
         }
     }
@@ -141,8 +147,8 @@ class MainFragment : Fragment() {
     private fun copyInput(act: Context, uri: Uri) {
         DocumentFile.fromSingleUri(act, uri)?.let { doc ->
             if (hasEnoughSpace(doc.length())) {
-                val root = act.cacheDir
-                val workspace = File(root, "workspace")
+                val workspace = viewModel.workDir
+                workspace.deleteRecursively()
                 workspace.mkdirs()
                 val out = File(workspace, doc.name)
                 act.contentResolver.openInputStream(uri).use { instream ->
@@ -155,10 +161,10 @@ class MainFragment : Fragment() {
                 if (out.exists() && out.length() > 0) {
                     viewModel.inZipProperty.value = out
                 } else {
-                    Toast.makeText(act, "Could not load file to convert", Toast.LENGTH_LONG).show()
+                    Toast.makeText(act, R.string.load_file_failed, Toast.LENGTH_LONG).show()
                 }
             } else {
-                Toast.makeText(act, "Not Enough Space", Toast.LENGTH_LONG).show()
+                Toast.makeText(act, R.string.hdd_full, Toast.LENGTH_LONG).show()
             }
         }
     }
