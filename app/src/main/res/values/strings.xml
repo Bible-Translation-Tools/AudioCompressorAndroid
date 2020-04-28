@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BTT: Audio Compressor</string>
+    <string name="app_name">BTT Audio Compressor</string>
     <string name="browse">Browse Files</string>
     <string name="convert">Convert</string>
     <string name="hdd_full">Not Enough Space</string>
