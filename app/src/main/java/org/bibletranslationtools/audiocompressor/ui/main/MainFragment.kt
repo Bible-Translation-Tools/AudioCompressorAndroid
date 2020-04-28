@@ -66,13 +66,6 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
-        val outZipObserver = Observer<File?> {
-            it?.let{
-                binding.outputBtn.visibility = View.VISIBLE
-            } ?: run {
-                binding.outputBtn.visibility = View.INVISIBLE
-            }
-        }
         val inputFileObserver = Observer<File?> {
             it?.let {
                 binding.selectedFileView.text = it.name
@@ -93,7 +86,6 @@ class MainFragment : Fragment() {
 
         disableUIIfInProgress(viewModel.inProgressProperty.value!!)
 
-        viewModel.outZipProperty.observe(this, outZipObserver)
         viewModel.inProgressProperty.observe(this, inProgressObserver)
         viewModel.inZipProperty.observe(this, inputFileObserver)
         viewModel.outPathUriProperty.observe(this, outputFileObserver)

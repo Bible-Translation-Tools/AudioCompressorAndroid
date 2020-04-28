@@ -59,6 +59,10 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
                 outZipProperty.value = final
                 writeOutput()
                 outZipProperty.value?.delete()
+                workDir.deleteRecursively()
+                outZipProperty.value = null
+                outPathUriProperty.value = null
+                inZipProperty.value = null
             }
     }
 
