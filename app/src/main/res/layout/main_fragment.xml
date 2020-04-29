@@ -22,10 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="32px"
+            android:layout_marginTop="32px"
+            android:layout_marginRight="32px"
+            android:layout_marginBottom="16px"
             android:layout_weight="1"
             android:background="#EAE6DA"
             android:foregroundGravity="center"
@@ -39,7 +39,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16px">
 
                 <TextView
                     android:id="@+id/selectInputPrompt"
@@ -48,7 +48,7 @@
                     android:gravity="center"
                     android:text="@string/pick_input_prompt"
                     android:textColor="#000000"
-                    android:textSize="30sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -78,10 +78,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="64dp"
+            android:layout_marginLeft="32px"
+            android:layout_marginTop="16px"
+            android:layout_marginRight="32px"
+            android:layout_marginBottom="32px"
             android:layout_weight="1"
             android:background="#EAE6DA"
             android:foregroundGravity="center"
@@ -95,7 +95,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16px">
 
                 <TextView
                     android:id="@+id/selectOutputPrompt"
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/pick_output_prompt"
                     android:textColor="#000000"
-                    android:textSize="30sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView

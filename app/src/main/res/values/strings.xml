@@ -6,4 +6,7 @@
     <string name="load_file_failed">Could not load file to convert</string>
     <string name="pick_input_prompt">Pick a File to Convert</string>
     <string name="pick_output_prompt">Choose Output Path</string>
+    <string name="complete">Complete!</string>
+    <string name="complete_extra">Your file was successfully converted.</string>
+    <string name="convert_again">Convert Again</string>
 </resources>
