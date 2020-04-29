@@ -67,7 +67,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     private fun convertAudio(dir: File) {
-        ConvertAudio.convertDir(dir)
+        ConvertAudio().convertDir(dir)
     }
 
     private fun rezip(dir: File, output: File) {
