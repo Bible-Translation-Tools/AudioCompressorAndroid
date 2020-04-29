@@ -72,7 +72,9 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
     private fun rezip(dir: File, output: File) {
         val zp = ZipFile(output.absolutePath)
-        zp.createZipFileFromFolder(dir, ZipParameters(), false, 0)
+        val params = ZipParameters()
+        params.isIncludeRootFolder = false
+        zp.createZipFileFromFolder(dir, params, false, 0)
     }
 
     private fun writeOutput() {
