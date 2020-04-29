@@ -33,6 +33,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
     val outPathUriProperty: MutableLiveData<DocumentFile?> = MutableLiveData<DocumentFile?>(null)
 
     val inProgressProperty = MutableLiveData(false)
+    val completedProperty = MutableLiveData(false)
 
     fun convertZip() {
         val zip = inZipProperty.value!!
@@ -63,6 +64,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
                 outZipProperty.value = null
                 outPathUriProperty.value = null
                 inZipProperty.value = null
+                completedProperty.value = true
             }
     }
 

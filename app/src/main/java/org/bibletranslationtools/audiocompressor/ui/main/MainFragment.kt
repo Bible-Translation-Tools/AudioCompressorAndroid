@@ -83,12 +83,19 @@ class MainFragment : Fragment() {
         val inProgressObserver = Observer<Boolean> {
             disableUIIfInProgress(it)
         }
+        val completedObserver = Observer<Boolean> {
+            if(it) {
+                viewModel.completedProperty.value = false
+                showSuccessDialog()
+            }
+        }
 
         disableUIIfInProgress(viewModel.inProgressProperty.value!!)
 
         viewModel.inProgressProperty.observe(this, inProgressObserver)
         viewModel.inZipProperty.observe(this, inputFileObserver)
         viewModel.outPathUriProperty.observe(this, outputFileObserver)
+        viewModel.completedProperty.observe(this, completedObserver)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -166,5 +173,9 @@ class MainFragment : Fragment() {
         tree?.let {
             viewModel.outPathUriProperty.value = it
         }
+    }
+
+    private fun showSuccessDialog() {
+        SuccessDialog().show(fragmentManager, "success_dialog")
     }
 }
