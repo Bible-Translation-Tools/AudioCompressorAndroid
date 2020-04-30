@@ -2,12 +2,13 @@ package org.bibletranslationtools.audiocompressor.audio
 
 import java.io.File
 import javazoom.jl.converter.Converter
+import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import java.util.concurrent.ThreadPoolExecutor
 
 class ConvertAudio {
-    private val pool = Executors.newFixedThreadPool(8) as ThreadPoolExecutor
+    private val pool = Executors.newFixedThreadPool(4) as ThreadPoolExecutor
 
     fun convertDir(dir: File) {
         val start = System.currentTimeMillis()
@@ -44,12 +45,23 @@ class ConvertAudio {
 
     fun wavToMp3(wav: File, mp3: File) {
         val mp3Args = arrayOf(
-            "-q", "5",
+            "-q", "9",
             "-m", "m",
             wav.absolutePath,
             mp3.absolutePath
         )
-        de.sciss.jump3r.Main().run(mp3Args)
+        if (android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.M) {
+            try {
+                de.sciss.jump3r.Main().run(mp3Args)
+            } catch(ex: IOException) {
+                val message = ex.message
+                if (message == null || !message.contains("BufferedOutputStream is closed")) {
+                    throw ex
+                }
+            }
+        } else {
+            de.sciss.jump3r.Main().run(mp3Args)
+        }
         wav.delete()
     }
 }
