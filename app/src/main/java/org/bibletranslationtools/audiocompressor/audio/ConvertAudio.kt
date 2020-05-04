@@ -45,11 +45,9 @@ class ConvertAudio {
         c.convert(mp3.absolutePath, wav.absolutePath)
         mp3.delete()
 
-        if (cue != null) {
-            if (cue.exists()) {
-                CueWavWriter(cue).write()
-                cue.delete()
-            }
+        if (cue != null && cue.exists()) {
+            CueWavWriter(cue).write()
+            cue.delete()
         }
     }
 
