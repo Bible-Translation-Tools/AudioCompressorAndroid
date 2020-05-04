@@ -2,6 +2,8 @@ package org.bibletranslationtools.audiocompressor.audio
 
 import java.io.File
 import javazoom.jl.converter.Converter
+import org.bibletranslationtools.cuesheetmanager.CueSheetWriter
+import org.bibletranslationtools.cuesheetmanager.CueWavWriter
 import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -23,7 +25,8 @@ class ConvertAudio {
                     when (file.extension) {
                         "mp3" -> mp3ToWav(
                             file,
-                            File(file.parentFile, file.name.substringBefore(".mp3") + ".wav")
+                            File(file.parentFile, file.name.substringBefore(".mp3") + ".wav"),
+                            File(file.parentFile, file.name.substringBefore(".mp3") + ".cue")
                         )
                         "wav" -> wavToMp3(
                             file,
@@ -37,10 +40,17 @@ class ConvertAudio {
         pool.shutdown()
     }
 
-    fun mp3ToWav(mp3: File, wav: File) {
+    fun mp3ToWav(mp3: File, wav: File, cue: File?) {
         val c = Converter()
         c.convert(mp3.absolutePath, wav.absolutePath)
         mp3.delete()
+
+        if (cue != null) {
+            if (cue.exists()) {
+                CueWavWriter(cue).write()
+                cue.delete()
+            }
+        }
     }
 
     fun wavToMp3(wav: File, mp3: File) {
@@ -62,6 +72,7 @@ class ConvertAudio {
         } else {
             de.sciss.jump3r.Main().run(mp3Args)
         }
+        CueSheetWriter(wav).write()
         wav.delete()
     }
 }
