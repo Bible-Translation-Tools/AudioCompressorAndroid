@@ -60,7 +60,7 @@ class ConvertAudio {
             wav.absolutePath,
             mp3.absolutePath
         )
-        if (android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.M) {
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M) {
             try {
                 de.sciss.jump3r.Main().run(mp3Args)
             } catch(ex: IOException) {
